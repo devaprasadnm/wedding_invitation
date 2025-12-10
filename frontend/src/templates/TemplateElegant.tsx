@@ -1,10 +1,10 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Heart, Clock, Navigation, MapPin } from 'lucide-react';
+import { Calendar, Clock, Navigation, MapPin, Heart } from 'lucide-react';
 import CountdownTimer from '../components/CountdownTimer';
 import HeroSlideshow from '../components/HeroSlideshow';
 import ImageCardSlider from '../components/ImageCardSlider';
 import InviteFooter from '../components/InviteFooter';
+import BlessingBoard from '../components/BlessingBoard';
 
 interface TemplateProps {
     data: {
@@ -18,8 +18,7 @@ export default function TemplateElegant({ data }: TemplateProps) {
     const { client, ceremonies, photos } = data;
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
-    const [rsvpForm, setRsvpForm] = useState({ name: '', email: '', message: '' });
-    const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
+
 
     const getPhotoUrl = (path: string) =>
         `${supabaseUrl}/storage/v1/object/public/client-photos/${path}`;
@@ -28,10 +27,7 @@ export default function TemplateElegant({ data }: TemplateProps) {
     const heroPhotos = photoUrls.slice(0, 5);
 
 
-    const handleRsvpSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setRsvpSubmitted(true);
-    };
+
 
     const addToCalendar = (event: any) => {
         const startDate = new Date(event.date_time);
@@ -192,7 +188,7 @@ export default function TemplateElegant({ data }: TemplateProps) {
 
             {/* SECTION E — RSVP / Send Blessings */}
             <section className="py-20 px-4 md:px-8 bg-gradient-to-b from-[#FFF8E6] to-[#FFB6C1]/20">
-                <div className="max-w-xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -202,58 +198,7 @@ export default function TemplateElegant({ data }: TemplateProps) {
                         <h2 className="text-3xl md:text-4xl italic mb-3">Send Your Blessings</h2>
                         <Heart className="w-6 h-6 text-[#FFB6C1] mx-auto" />
                     </motion.div>
-
-                    {rsvpSubmitted ? (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-white rounded-[20px] p-10 text-center shadow-xl"
-                        >
-                            <Heart className="w-14 h-14 text-[#FFB6C1] mx-auto mb-6" />
-                            <h3 className="text-2xl mb-3">Thank You!</h3>
-                            <p className="text-[#4A4A4A]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                                Your blessings mean the world to us.
-                            </p>
-                        </motion.div>
-                    ) : (
-                        <motion.form
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            onSubmit={handleRsvpSubmit}
-                            className="bg-white rounded-[20px] p-8 shadow-xl space-y-5"
-                            style={{ fontFamily: "'Inter', sans-serif" }}
-                        >
-                            <input
-                                type="text"
-                                placeholder="Your Name"
-                                value={rsvpForm.name}
-                                onChange={(e) => setRsvpForm({ ...rsvpForm, name: e.target.value })}
-                                className="w-full px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 transition-all"
-                                required
-                            />
-                            <input
-                                type="email"
-                                placeholder="Email (optional)"
-                                value={rsvpForm.email}
-                                onChange={(e) => setRsvpForm({ ...rsvpForm, email: e.target.value })}
-                                className="w-full px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 transition-all"
-                            />
-                            <textarea
-                                placeholder="Your Wishes & Blessings"
-                                value={rsvpForm.message}
-                                onChange={(e) => setRsvpForm({ ...rsvpForm, message: e.target.value })}
-                                rows={4}
-                                className="w-full px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 resize-none transition-all"
-                            />
-                            <button
-                                type="submit"
-                                className="w-full py-4 bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
-                            >
-                                Send Blessings 💕
-                            </button>
-                        </motion.form>
-                    )}
+                    <BlessingBoard clientId={client.id} theme="elegant" />
                 </div>
             </section>
 

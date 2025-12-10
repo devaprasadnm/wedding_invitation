@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, MapPin, Calendar, Clock } from 'lucide-react';
+import { MapPin, Calendar, Clock } from 'lucide-react';
 import CountdownTimer from '../components/CountdownTimer';
 import ImageCardSlider from '../components/ImageCardSlider';
 import InviteFooter from '../components/InviteFooter';
+import BlessingBoard from '../components/BlessingBoard';
 
 interface TemplateProps {
     data: {
@@ -18,7 +19,6 @@ export default function TemplateMotion({ data }: TemplateProps) {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
     const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
-    const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
 
     const getPhotoUrl = (path: string) =>
         `${supabaseUrl}/storage/v1/object/public/client-photos/${path}`;
@@ -253,43 +253,13 @@ export default function TemplateMotion({ data }: TemplateProps) {
                 </section>
             )}
 
-            {/* RSVP */}
+            {/* RSVP -> Blessing Board */}
             <section className="py-20 px-4">
-                <div className="max-w-md mx-auto text-center">
+                <div className="max-w-6xl mx-auto text-center">
                     <h2 className="text-3xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-pink-500 text-transparent bg-clip-text">
                         Send Love
                     </h2>
-
-                    {rsvpSubmitted ? (
-                        <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="p-8"
-                        >
-                            <Heart className="w-16 h-16 text-pink-500 mx-auto mb-4 animate-pulse" />
-                            <p className="text-xl">Thank you! 💕</p>
-                        </motion.div>
-                    ) : (
-                        <form onSubmit={(e) => { e.preventDefault(); setRsvpSubmitted(true); }} className="space-y-4">
-                            <input
-                                type="text"
-                                placeholder="Your Name"
-                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors"
-                                required
-                            />
-                            <textarea
-                                placeholder="Your Message"
-                                rows={3}
-                                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 resize-none transition-colors"
-                            />
-                            <button
-                                type="submit"
-                                className="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold text-lg hover:scale-[1.02] transition-transform"
-                            >
-                                Send ❤️
-                            </button>
-                        </form>
-                    )}
+                    <BlessingBoard clientId={client.id} theme="motion" />
                 </div>
             </section>
 

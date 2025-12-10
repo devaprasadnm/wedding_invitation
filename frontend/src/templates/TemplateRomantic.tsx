@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Heart } from 'lucide-react';
+import { Calendar, MapPin } from 'lucide-react';
 import InviteFooter from '../components/InviteFooter';
+import ImageCardSlider from '../components/ImageCardSlider';
+import BlessingBoard from '../components/BlessingBoard';
 
 interface TemplateProps {
     data: {
@@ -15,8 +17,8 @@ export default function TemplateRomantic({ data }: TemplateProps) {
     const { client, ceremonies, photos } = data;
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
-    const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
-    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+
+
 
     const getPhotoUrl = (path: string) =>
         `${supabaseUrl}/storage/v1/object/public/client-photos/${path}`;
@@ -24,14 +26,7 @@ export default function TemplateRomantic({ data }: TemplateProps) {
     const photoUrls = photos?.map(p => getPhotoUrl(p.storage_path)) || [];
     const mainPhoto = photoUrls[0];
 
-    // Auto-rotate gallery
-    useEffect(() => {
-        if (photoUrls.length <= 1) return;
-        const timer = setInterval(() => {
-            setCurrentPhotoIndex(prev => (prev + 1) % photoUrls.length);
-        }, 3000);
-        return () => clearInterval(timer);
-    }, [photoUrls.length]);
+
 
     const weddingDate = ceremonies && ceremonies.length > 0
         ? new Date(ceremonies[0].date_time).toLocaleDateString('en-US', {
@@ -51,7 +46,7 @@ export default function TemplateRomantic({ data }: TemplateProps) {
     };
 
     return (
-        <div className="min-h-screen bg-white text-gray-800" style={{ fontFamily: "'Playfair Display', serif" }}>
+        <div className="min-h-screen bg-[#FDFBF7] text-gray-800" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
 
             {/* Hero Section */}
             <section className="py-12 px-4 text-center">
@@ -64,53 +59,57 @@ export default function TemplateRomantic({ data }: TemplateProps) {
                     ✿
                 </motion.div>
 
-                {/* Heart-Shaped Photo Frame */}
+                {/* Splatter/Brush-Shaped Photo Frame */}
                 {mainPhoto && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
-                        className="relative w-64 h-64 md:w-80 md:h-80 mx-auto mb-10"
+                        className="relative w-72 h-72 md:w-96 md:h-96 mx-auto mb-12"
                     >
-                        {/* Watercolor Heart Background */}
+                        {/* Watercolor Background Elements */}
                         <div
-                            className="absolute inset-0 rounded-full"
+                            className="absolute inset-0"
                             style={{
-                                background: 'radial-gradient(ellipse at center, rgba(144, 238, 144, 0.4) 0%, rgba(60, 179, 113, 0.3) 50%, rgba(34, 139, 34, 0.2) 70%, transparent 100%)',
-                                transform: 'scale(1.15)',
-                                filter: 'blur(8px)'
+                                background: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.2) 0%, rgba(230, 200, 100, 0.15) 40%, transparent 70%)',
+                                transform: 'scale(1.2)',
+                                filter: 'blur(20px)'
                             }}
                         />
 
-                        {/* Decorative Splashes */}
-                        <div className="absolute -top-4 -left-4 w-8 h-8 bg-green-400/30 rounded-full blur-sm" />
-                        <div className="absolute -bottom-2 -right-6 w-6 h-6 bg-yellow-400/40 rounded-full blur-sm" />
-                        <div className="absolute top-10 -right-8 w-4 h-4 bg-green-500/40 rounded-full blur-sm" />
-
-                        {/* Heart-shaped Image */}
-                        <div
-                            className="relative w-full h-full overflow-hidden"
-                            style={{
-                                clipPath: 'path("M 140 20 C 73 20, 20 64, 20 120 C 20 200, 140 256, 140 256 C 140 256, 260 200, 260 120 C 260 64, 207 20, 140 20 Z")',
-                                transform: 'scale(0.9)'
-                            }}
-                        >
-                            <img
-                                src={mainPhoto}
-                                alt="Couple"
+                        {/* Paint Splatter Image Mask */}
+                        <div className="relative w-full h-full drop-shadow-2xl">
+                            <div
                                 className="w-full h-full object-cover"
-                            />
+                                style={{
+                                    clipPath: 'path("M232.5,22.5 C205.5,12.5 185.5,35.5 165.5,25.5 C145.5,15.5 125.5,45.5 105.5,35.5 C85.5,25.5 65.5,53.5 55.5,75.5 C45.5,95.5 15.5,108.5 25.5,135.5 C35.5,162.5 55.5,182.5 65.5,205.5 C75.5,228.5 55.5,248.5 75.5,268.5 C95.5,288.5 125.5,278.5 150.5,295.5 C175.5,312.5 205.5,298.5 232.5,285.5 C259.5,272.5 275.5,248.5 288.5,225.5 C301.5,202.5 325.5,182.5 315.5,155.5 C305.5,128.5 285.5,105.5 272.5,82.5 C259.5,59.5 259.5,32.5 232.5,22.5 Z")',
+                                    transform: 'scale(1.1)',
+                                    backgroundColor: '#ddd' // Fallback
+                                }}
+                            >
+                                <img
+                                    src={mainPhoto}
+                                    alt="Couple"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
                         </div>
+
+                        {/* Gold Accent Strokes (Decorative) */}
+                        <svg className="absolute -top-6 -right-6 w-24 h-24 text-[#D4AF37] opacity-60" viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M10,50 Q30,20 50,50 T90,50" fill="none" stroke="currentColor" strokeWidth="2" />
+                            <circle cx="80" cy="20" r="3" />
+                            <circle cx="10" cy="80" r="2" />
+                        </svg>
                     </motion.div>
                 )}
 
-                {/* Couple Name */}
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-4xl md:text-6xl font-normal mb-4"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
+                    className="text-5xl md:text-7xl font-normal mb-6 text-[#2C2C2C]"
+                    style={{ fontFamily: "'Cinzel', serif" }}
                 >
                     {client.couple_name}
                 </motion.h1>
@@ -121,8 +120,8 @@ export default function TemplateRomantic({ data }: TemplateProps) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="text-gray-500 text-lg mb-10"
-                        style={{ fontFamily: "'Inter', sans-serif" }}
+                        className="text-[#666] text-xl mb-12 tracking-widest"
+                        style={{ fontFamily: "'Cinzel', serif" }}
                     >
                         {weddingDate}
                     </motion.p>
@@ -143,45 +142,20 @@ export default function TemplateRomantic({ data }: TemplateProps) {
                 )}
             </section>
 
-            {/* Photo Gallery Carousel */}
-            {photoUrls.length > 1 && (
-                <section className="py-12 bg-gray-50">
-                    <div className="max-w-5xl mx-auto px-4">
-                        {/* Dots Indicator */}
-                        <div className="flex justify-center gap-2 mb-6">
-                            {photoUrls.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setCurrentPhotoIndex(index)}
-                                    className={`w-3 h-3 rounded-full transition-all ${index === currentPhotoIndex
-                                        ? 'bg-gray-800 w-6'
-                                        : 'bg-gray-300'
-                                        }`}
-                                />
-                            ))}
-                        </div>
-
-                        {/* Horizontal Gallery */}
-                        <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-                            {photoUrls.map((photo, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: index * 0.1 }}
-                                    className={`flex-shrink-0 w-48 md:w-64 aspect-[3/4] rounded-xl overflow-hidden snap-center transition-transform duration-300 ${index === currentPhotoIndex ? 'scale-105 shadow-xl' : 'scale-100'
-                                        }`}
-                                >
-                                    <img
-                                        src={photo}
-                                        alt={`Gallery ${index + 1}`}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
+            {/* Featured Photos (Animated Slider) */}
+            {photoUrls.length > 2 && (
+                <section className="py-20 px-4 bg-white">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center mb-12"
+                    >
+                        <h2 className="text-3xl md:text-4xl text-[#D4AF37]" style={{ fontFamily: "'Great Vibes', cursive" }}>
+                            Captured Moments
+                        </h2>
+                    </motion.div>
+                    <ImageCardSlider images={photoUrls} autoPlay={true} interval={4000} />
                 </section>
             )}
 
@@ -248,31 +222,14 @@ export default function TemplateRomantic({ data }: TemplateProps) {
                 </div>
             </section>
 
-            {/* Send Blessings Section */}
+            {/* Send Blessings Section (New Board) */}
             <section className="py-16 px-4 bg-gray-50">
-                <div className="max-w-md mx-auto text-center">
-                    <div className="text-4xl mb-4">🍃</div>
-
-                    {rsvpSubmitted ? (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="py-8"
-                        >
-                            <Heart className="w-16 h-16 text-red-400 mx-auto mb-4" />
-                            <p className="text-xl">Thank you for your blessings! 💕</p>
-                        </motion.div>
-                    ) : (
-                        <>
-                            <button
-                                onClick={() => setRsvpSubmitted(true)}
-                                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-red-400 to-red-500 text-white rounded-full text-lg font-medium hover:from-red-500 hover:to-red-600 transition-all shadow-lg"
-                                style={{ fontFamily: "'Inter', sans-serif" }}
-                            >
-                                ✏️ Send Blessings
-                            </button>
-                        </>
-                    )}
+                <div className="max-w-6xl mx-auto text-center">
+                    <div className="text-4xl mb-8">🍃</div>
+                    <h2 className="text-3xl md:text-5xl font-normal mb-10 text-[#2C2C2C]" style={{ fontFamily: "'Cinzel', serif" }}>
+                        Wishes & Blessings
+                    </h2>
+                    <BlessingBoard clientId={client.id} theme="romantic" />
                 </div>
             </section>
 

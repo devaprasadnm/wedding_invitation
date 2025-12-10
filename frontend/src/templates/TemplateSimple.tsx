@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Calendar, Send, Clock, ExternalLink } from 'lucide-react';
+import { MapPin, Calendar, Clock, ExternalLink } from 'lucide-react';
 import CountdownTimer from '../components/CountdownTimer';
 import ImageCardSlider from '../components/ImageCardSlider';
 import InviteFooter from '../components/InviteFooter';
+import BlessingBoard from '../components/BlessingBoard';
 
 interface TemplateProps {
     data: {
@@ -17,8 +17,7 @@ export default function TemplateSimple({ data }: TemplateProps) {
     const { client, ceremonies, photos } = data;
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 
-    const [rsvpForm, setRsvpForm] = useState({ name: '', message: '' });
-    const [rsvpSubmitted, setRsvpSubmitted] = useState(false);
+
 
     const getPhotoUrl = (path: string) =>
         `${supabaseUrl}/storage/v1/object/public/client-photos/${path}`;
@@ -170,46 +169,12 @@ export default function TemplateSimple({ data }: TemplateProps) {
                 </section>
             )}
 
-            {/* RSVP Section */}
+            {/* RSVP Section -> Blessing Board */}
             <section className="py-16 px-4 md:px-8">
-                <div className="max-w-md mx-auto">
+                <div className="max-w-6xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">Send Blessings</h2>
-                    <p className="text-gray-500 text-center mb-8">Share your wishes with us</p>
-
-                    {rsvpSubmitted ? (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center"
-                        >
-                            <p className="text-green-700 font-medium">Thank you for your blessings! 💕</p>
-                        </motion.div>
-                    ) : (
-                        <form onSubmit={(e) => { e.preventDefault(); setRsvpSubmitted(true); }} className="space-y-4">
-                            <input
-                                type="text"
-                                placeholder="Your Name"
-                                value={rsvpForm.name}
-                                onChange={(e) => setRsvpForm({ ...rsvpForm, name: e.target.value })}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/20"
-                                required
-                            />
-                            <textarea
-                                placeholder="Your Message"
-                                value={rsvpForm.message}
-                                onChange={(e) => setRsvpForm({ ...rsvpForm, message: e.target.value })}
-                                rows={4}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-black/20 resize-none"
-                            />
-                            <button
-                                type="submit"
-                                className="w-full py-3 bg-black text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors"
-                            >
-                                <Send className="w-4 h-4" />
-                                Send
-                            </button>
-                        </form>
-                    )}
+                    <p className="text-gray-500 text-center mb-10">Share your wishes with us</p>
+                    <BlessingBoard clientId={client.id} theme="simple" />
                 </div>
             </section>
 

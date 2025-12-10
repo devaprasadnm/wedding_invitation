@@ -23,9 +23,17 @@ export default function InviteFooter({ coupleName, weddingDate, theme = 'dark' }
     }, []);
 
     const fetchSettings = async () => {
-        const { data } = await supabase.from('settings').select('*').single();
-        if (data) {
-            setSettings(data);
+        try {
+            const { data, error } = await supabase.from('settings').select('*').single();
+            if (error) {
+                console.warn('Could not fetch settings (406 expected if table missing):', error.message);
+                return;
+            }
+            if (data) {
+                setSettings(data);
+            }
+        } catch (err) {
+            console.warn('Error fetching settings:', err);
         }
     };
 
