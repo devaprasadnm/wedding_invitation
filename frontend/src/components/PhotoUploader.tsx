@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Upload, CheckCircle } from 'lucide-react';
+import { Upload } from 'lucide-react';
 
 interface PhotoUploaderProps {
     clientId: string;

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface PhotoGalleryProps {
@@ -55,8 +55,8 @@ export default function PhotoGallery({ photos, onPhotoClick }: PhotoGalleryProps
                                 alt={`Gallery ${index + 1}`}
                                 onLoad={() => handleImageLoad(index)}
                                 className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${loadedImages.has(index)
-                                        ? 'blur-0 opacity-100'
-                                        : 'blur-sm opacity-0'
+                                    ? 'blur-0 opacity-100'
+                                    : 'blur-sm opacity-0'
                                     }`}
                                 loading="lazy"
                             />
